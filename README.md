@@ -5,7 +5,7 @@ Source code and resources for light lower control
 
 26Apr23
 
-test 
+
 Communication
 - Configure CAN ID to 04
 - Configure the CANbus communication protocol to be compatible with what we have been using already. Figure out the settings that you need to place in the Arduino?
@@ -66,4 +66,13 @@ How about placing this on a Google Doc, then we update the versions as we come-u
 
 6)CCW fast
 
-7)CW slow 
+7)CW slow  
+
+### Light Tower Modes
+1. Steady green - Sutonomous mode 
+2. Greenflash/rotate - Receiving commands from agx for throttle and in auto mode
+3. Buzzer - Before moving
+4. Yellow - Manual mode
+5. Yellow flashing/rotate - Manual mode receiving throttle commands from remote
+6. Flash red slow - No commmunication from rtc to arduino
+7. Fast red flash - No comms from agx to rtc(may be a tricky one)
