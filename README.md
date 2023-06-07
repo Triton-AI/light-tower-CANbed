@@ -3,15 +3,16 @@ Source code and resources for light lower control
 
 # Autonomous evGoKart Light Tower Software Requirements V0.01
 
-26Apr23
+### 26Apr23
 
 
-Communication
+## Communication
+
 - Configure CAN ID to 04
 - Configure the CANbus communication protocol to be compatible with what we have been using already. Figure out the settings that you need to place in the Arduino?
 - Test the communication with the Arduino and the RTC, send messages between them. Talk to the ECE 191 team working on the RTC
 
-Relay board
+## Relay board
 - Connect the power of the board to 5V
 - Connect the 4 inputs from the relay to 4 pins of the Arduino
 - Show that you can control each I/O (easy 1/0) at the I/O. You should hear the clicks on the relays on and off
@@ -28,7 +29,7 @@ Listen to the Can communication heart-beat. If you don't hear the heart-beat in 
 
 - Light Control Protocol. Develop a protocol that has the following format
 
-C-T-R  (Color Time Repeat)
+## C-T-R  (Color Time Repeat)
 ex: red-250-1.  That means red color flash once at 250 ms
 0 means light off
 1 means light on constant
@@ -46,29 +47,18 @@ If you don't hear the heart-beat then turn off all the lights and flash red with
 
 Develop and publish a set of ROS2 messages from the high level node to the VASS (Vehicle Alert Signaling System) …  Write a test publisher ROS2 Node to run a script (or a set of scripts) to go through and operate the VASS. 
 
-How about placing this on a Google Doc, then we update the versions as we come-up with new ideas.
+##  Yellow Light Modes (Yellow wire acts as a switch when it receives 24V)
 
+1. Slow Blink
+2. Triple burst high low
+3. Triple burst low hi
+4. CCW slow
+5. CW slow
+6. CCW fast
+7. CW slow  
 
+## Light Tower Modes
 
-
-
-###  Yellow Light Modes (Yellow wire acts as a switch when it receives 24V)
-
-1)Slow Blink
-
-2)Triple burst high low
-
-3)Triple burst low hi
-
-4)CCW slow
-
-5)CW slow
-
-6)CCW fast
-
-7)CW slow  
-
-### Light Tower Modes
 1. Steady green - Sutonomous mode 
 2. Greenflash/rotate - Receiving commands from agx for throttle and in auto mode
 3. Buzzer - Before moving
