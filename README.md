@@ -1,7 +1,7 @@
 # light-tower-CANbed
 Source code and resources for light lower control
 
-###Yellow Light Modes (Yellow wire acts as a switch when it receives 24V)
+###  Yellow Light Modes (Yellow wire acts as a switch when it receives 24V)
 
 1)Slow Blink
 2)Triple burst high low
