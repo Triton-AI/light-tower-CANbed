@@ -1,5 +1,13 @@
 # light-tower-CANbed
-Source code and resources for light lower control
+This code is designed to receive CAN messages and display the corresponding light status as an indicator for observers. It uses an Arduino board and the MCP_CAN library to interface with the CAN bus. The code includes various functions for controlling different LED pins and implementing different blink patterns.
+
+The loop() function continuously checks for incoming CAN messages. However, for testing purposes, it temporarily passes a fixed CAN message value (towerControl(1)) to the towerControl() function. The towerControl() function determines the appropriate action based on the received CAN message. It calls different functions (slowGreenBlink(), slowRedBlink(), etc.) to control the LEDs based on the received CAN message value.
+
+The code includes functions for controlling LED blink rates (slowBlinkRate, fastBlinkRate) and buzzer behavior (runBuzzerOnce(), buzzerTime). The LED pins (redLedPin, greenLedPin, yellowLedPin, buzzerPin) are defined, and their states are toggled based on the defined blink rates and the received CAN message values.
+
+The code also includes a function (displayCANData()) for displaying the received CAN message's data and sender's ID in hexadecimal format.
+
+Overall, the code provides a framework for receiving CAN messages, interpreting them, and controlling LEDs and a buzzer accordingly to indicate the corresponding light status for observers.
 
 # Autonomous evGoKart Light Tower Software Requirements V0.01
 
