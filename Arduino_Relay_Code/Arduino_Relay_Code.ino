@@ -51,25 +51,27 @@ void setup() {
 }
 
 void loop() {
- /* unsigned char len = 0;    //Variables which acquire Can-Bus message data
+  unsigned char len = 0;    //Variables which acquire Can-Bus message data
   unsigned char buf[8];
   unsigned char pastBuf[8];
   if (CAN_MSGAVAIL == CAN.checkReceive()) {  //Check if a CAN signal is available
 
-    CAN.readMsgBuf(&len, buf);    // read data.  len = data length, buf = data buffer
-    Serial.println("New message from CAN was read");
-    canId = CAN.getCanId();
+    //CAN.readMsgBuf(&len, buf);    // read data.  len = data length, buf = data buffer
+    //Serial.println("New message from CAN was read");
+    //canId = CAN.getCanId();
 
     //displayCANData(buf, len, canId);
     
-    towerControl(buf[0]);
+    //towerControl(buf[0]);
     /*if(canId == XX) {
       //Type cast to int?
       towerControl(buf[0]);//Pass the Can message as an integer to towerControl to decide what function to perform
-    }
+    }*/
+
   }
-*/
-towerControl(1);
+  towerControl(0);
+
+
 }
 
 void towerControl(int CAN_message) {
@@ -79,15 +81,12 @@ void towerControl(int CAN_message) {
       break;
     case 1:
       slowRedBlink();
-      fastGreenBlink();
       break;
     case 2:
       slowYellowBlink();
       break;
     case 3:
-      shutDown(redLedPin,yellowLedPin,buzzerPin);
       fastGreenBlink();
-      Serial.println("fastGreenBlink() called");
       break;
     case 4:
       fastRedBlink();
@@ -96,7 +95,9 @@ void towerControl(int CAN_message) {
       fastYellowBlink();
       break;
     case 6:
-      //Insert light function here
+      slowRedBlink();
+      fastYellowBlink();
+      runBuzzerOnce();
       break;
     case 7:
       //Insert light function here
@@ -208,29 +209,28 @@ void fastYellowBlink() {
 }
 
 void runBuzzerOnce(){//Lil Tricky to run once
-  if (!buzzerState) {
-    // Start the buzzer
-    turnOn(buzzerPin);
-    buzzerPreviousTime = millis();
-    buzzerState = true;
-  } 
-  else {
-    // Check if the buzzer duration has elapsed
-    unsigned long currentTime = millis();
-    if (currentTime - buzzerPreviousTime >= buzzerTime) {
-      // Stop the buzzer
+ 
+  unsigned long buzzerCurrentTime = millis();
+  if (buzzerCurrentTime - buzzerPreviousTime >= 3000) {
+    buzzerPreviousTime = buzzerCurrentTime;
+    buzzerState = !buzzerState;
+    if (buzzerState) {
+      turnOn(buzzerPin);
+    } 
+    else {
       turnOff(buzzerPin);
-      buzzerState = false;
     }
   }
 }
 
 void turnOn(int pin) {
-  analogWrite(pin, 255);
+  //analogWrite(pin, 255);
+  digitalWrite(pin, HIGH);
 }
 
 void turnOff(int pin) {
-  analogWrite(pin, 0);
+  //analogWrite(pin, 0);
+  digitalWrite(pin, LOW);
 }
 
 
