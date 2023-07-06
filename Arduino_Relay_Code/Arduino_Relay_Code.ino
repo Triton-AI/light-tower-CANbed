@@ -16,7 +16,7 @@ const int rotatingYellowPin    = A0;
 const int RotatingYellowSwitch = A1;
 // Define the blink rate in milliseconds
 unsigned long slowBlinkRate = 1000; // Default slow blink rate is 1 second
-unsigned long fastBlinkRate = 50; // Default slow blink rate is 1 second
+unsigned long fastBlinkRate = 50; // Default fast blink rate is 0.05 second
 unsigned long buzzerTime = 3000; // Default bbuzzer duration is 3 s
 unsigned long canId = 0;
 // Variables to track timing
@@ -55,21 +55,19 @@ void loop() {
   unsigned char buf[8];
   unsigned char pastBuf[8];
   if (CAN_MSGAVAIL == CAN.checkReceive()) {  //Check if a CAN signal is available
+    attachInterrupt(digitalPinToInterrupt(SPI_CS_PIN), towerControl, FALLING);
 
-    //CAN.readMsgBuf(&len, buf);    // read data.  len = data length, buf = data buffer
-    //Serial.println("New message from CAN was read");
-    //canId = CAN.getCanId();
+    CAN.readMsgBuf(&len, buf);    // read data.  len = data length, buf = data buffer
+    canId = CAN.getCanId();
 
-    //displayCANData(buf, len, canId);
-    
-    //towerControl(buf[0]);
+    displayCANData(buf, len, canId);
+    towerControl(buf[0]);
     /*if(canId == XX) {
       //Type cast to int?
       towerControl(buf[0]);//Pass the Can message as an integer to towerControl to decide what function to perform
     }*/
 
   }
-  towerControl(0);
 
 
 }
@@ -135,6 +133,10 @@ void slowRedBlink() {
 
 void fastRedBlink() {
   unsigned long redCurrentTime = millis();
+  Serial.print("Current: ");
+  Serial.println(redCurrentTime);
+  Serial.print("Past: ");
+  Serial.print(redPreviousTime);
   if (redCurrentTime - redPreviousTime >= fastBlinkRate) {
     redPreviousTime = redCurrentTime;
     redLedState = !redLedState;
