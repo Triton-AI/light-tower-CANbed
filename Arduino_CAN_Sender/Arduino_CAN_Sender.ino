@@ -24,7 +24,7 @@ void setup()
     Serial.println("CAN BUS OK!");
 }
 
-unsigned char stmp[8] = {4, 0, 0, 0, 0, 0, 0, 0};
+unsigned char stmp[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 void loop()
 {
     // send data:  id = 0x00, standrad frame, data len = 8, stmp: data buf

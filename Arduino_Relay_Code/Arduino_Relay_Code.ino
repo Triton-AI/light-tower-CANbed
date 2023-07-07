@@ -7,16 +7,16 @@
 const int SPI_CS_PIN = 17; 
 
 // Define the LED pin
-const int greenLedPin  = 11;
-const int redLedPin    = 10;
-const int yellowLedPin = 9;
-const int buzzerPin    = 8;
+const int greenLedPin  = 10;
+const int redLedPin    = 11;
+const int yellowLedPin = 8;
+const int buzzerPin    = 9;
 
 const int rotatingYellowPin    = A0;
 const int RotatingYellowSwitch = A1;
 // Define the blink rate in milliseconds
-unsigned long slowBlinkRate = 1000; // Default slow blink rate is 1 second
-unsigned long fastBlinkRate = 50; // Default fast blink rate is 0.05 second
+unsigned long slowBlinkRate = 2000; // Default slow blink rate is 1 second
+unsigned long fastBlinkRate = 100; // Default fast blink rate is 0.05 second
 unsigned long buzzerTime = 3000; // Default bbuzzer duration is 3 s
 unsigned long canId = 0;
 // Variables to track timing
@@ -38,7 +38,7 @@ void setup() {
   // Initialize the LED pin as an output
   pinMode(redLedPin, OUTPUT);
   pinMode(greenLedPin, OUTPUT);
-  pinMode(redLedPin, OUTPUT);
+  pinMode(yellowLedPin, OUTPUT);
   pinMode(buzzerPin, OUTPUT);
 
   Serial.begin(115200);
@@ -48,6 +48,7 @@ void setup() {
     delay(100);
   }
   Serial.println("CAN BUS OK!");
+ 
 }
 
 void loop() {
@@ -55,11 +56,11 @@ void loop() {
   unsigned char buf[8];
   unsigned char pastBuf[8];
   if (CAN_MSGAVAIL == CAN.checkReceive()) {  //Check if a CAN signal is available
-    attachInterrupt(digitalPinToInterrupt(SPI_CS_PIN), towerControl, FALLING);
+    //attachInterrupt(digitalPinToInterrupt(SPI_CS_PIN), towerControl, FALLING);
 
     CAN.readMsgBuf(&len, buf);    // read data.  len = data length, buf = data buffer
     canId = CAN.getCanId();
-
+    Serial.println("CAN Recieved - sending");
     displayCANData(buf, len, canId);
     towerControl(buf[0]);
     /*if(canId == XX) {
@@ -68,7 +69,13 @@ void loop() {
     }*/
 
   }
-
+/*
+  else
+  {
+    // Serial.println("CAN NOT AVAILABLE");
+    towerControl(3);
+  }
+*/
 
 }
 
@@ -76,26 +83,33 @@ void towerControl(int CAN_message) {
   switch(CAN_message) {
     case 0:
       slowGreenBlink();
+      //Serial.println("Slow Green");
       break;
     case 1:
       slowRedBlink();
+      //Serial.println("Slow Red");
       break;
     case 2:
       slowYellowBlink();
+      //Serial.println("Slow Yellow");
       break;
     case 3:
       fastGreenBlink();
+      //Serial.println("Fast Green");
       break;
     case 4:
       fastRedBlink();
+      //Serial.println("Fast Red");
       break;
     case 5:
       fastYellowBlink();
+      //Serial.println("Fast Yellow");
       break;
     case 6:
       slowRedBlink();
       fastYellowBlink();
       runBuzzerOnce();
+      //Serial.println("Random case");
       break;
     case 7:
       //Insert light function here
@@ -164,15 +178,13 @@ void slowGreenBlink() {
 }
 
 void fastGreenBlink() {
-
-
   unsigned long greenCurrentTime = millis();
   if (greenCurrentTime - greenPreviousTime >= fastBlinkRate) {
   greenPreviousTime = greenCurrentTime;
   greenLedState = !greenLedState;
   if (greenLedState) {
     turnOn(greenLedPin);
-    Serial.println("turned on");
+    //Serial.println("turned on");
   } 
     else {
     turnOff(greenLedPin);
@@ -211,7 +223,6 @@ void fastYellowBlink() {
 }
 
 void runBuzzerOnce(){//Lil Tricky to run once
- 
   unsigned long buzzerCurrentTime = millis();
   if (buzzerCurrentTime - buzzerPreviousTime >= 3000) {
     buzzerPreviousTime = buzzerCurrentTime;
