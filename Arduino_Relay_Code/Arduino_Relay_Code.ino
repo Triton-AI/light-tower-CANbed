@@ -15,7 +15,7 @@ const int buzzerPin    = 9;
 const int rotatingYellowPin    = A0;
 const int RotatingYellowSwitch = A1;
 // Define the blink rate in milliseconds
-unsigned long slowBlinkRate = 2000; // Default slow blink rate is 1 second
+unsigned long slowBlinkRate = 1000; // Default slow blink rate is 1 second
 unsigned long fastBlinkRate = 100; // Default fast blink rate is 0.05 second
 unsigned long buzzerTime = 3000; // Default bbuzzer duration is 3 s
 unsigned long canId = 0;
@@ -47,7 +47,7 @@ void setup() {
     Serial.println("CAN BUS FAIL!");
     delay(100);
   }
-  Serial.println("CAN BUS OK!");
+  // Serial.println("CAN BUS OK!");
  
 }
 
@@ -69,13 +69,12 @@ void loop() {
     }*/
 
   }
-/*
   else
   {
     // Serial.println("CAN NOT AVAILABLE");
-    towerControl(3);
+    towerControl(0);
   }
-*/
+
 
 }
 
@@ -147,10 +146,6 @@ void slowRedBlink() {
 
 void fastRedBlink() {
   unsigned long redCurrentTime = millis();
-  Serial.print("Current: ");
-  Serial.println(redCurrentTime);
-  Serial.print("Past: ");
-  Serial.print(redPreviousTime);
   if (redCurrentTime - redPreviousTime >= fastBlinkRate) {
     redPreviousTime = redCurrentTime;
     redLedState = !redLedState;
@@ -184,7 +179,6 @@ void fastGreenBlink() {
   greenLedState = !greenLedState;
   if (greenLedState) {
     turnOn(greenLedPin);
-    //Serial.println("turned on");
   } 
     else {
     turnOff(greenLedPin);
@@ -242,7 +236,7 @@ void turnOn(int pin) {
 }
 
 void turnOff(int pin) {
-  //analogWrite(pin, 0);
+    //analogWrite(pin, 0);
   digitalWrite(pin, LOW);
 }
 
